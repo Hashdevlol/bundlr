@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundlr — Launch Tokens Like a Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple: #9945FF;
+            --cyan: #14F195;
+            --dark: #0E0E10;
+            --darker: #09090B;
+            --gray: #71717A;
+            --light: #FAFAFA;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: var(--dark);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(153, 69, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--light);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.05);
+            box-shadow: none;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(153, 69, 255, 0.1);
+            border: 1px solid rgba(153, 69, 255, 0.2);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--purple);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--dark);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(153, 69, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(153, 69, 255, 0.2), rgba(20, 241, 149, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        /* Code Block */
+        .code-section {
+            padding: 80px 0;
+        }
+
+        .code-section h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 48px;
+        }
+
+        .code-block {
+            background: var(--dark);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+        }
+
+        .code-line {
+            margin: 8px 0;
+        }
+
+        .code-comment {
+            color: var(--gray);
+        }
+
+        .code-cmd {
+            color: var(--cyan);
+        }
+
+        /* CTA */
+        .cta {
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo"><span class="gradient-text">Bundlr</span></div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#docs">Docs</a></li>
+                <li><a href="https://github.com/hashdevlol/bundlr">GitHub</a></li>
+            </ul>
+            <a href="#" class="btn">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <span class="hero-badge">🚀 Now in Beta</span>
+            <h1>Launch tokens<br><span class="gradient-text">like a pro</span></h1>
+            <p>One-click bundle launcher for Solana. Generate wallets, coordinate buys, cascade sells. Everything you need to launch successfully.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn">Start Launching</a>
+                <a href="https://github.com/hashdevlol/bundlr" class="btn btn-outline">View on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👛</div>
+                    <h3>20-Wallet Bundler</h3>
+                    <p>Generate and fund 20 fresh wallets automatically. Split into 3 groups for realistic buying patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Staggered Buys</h3>
+                    <p>Coordinate purchases across wallet groups. Simulates organic activity, avoids detection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Cascading Sells</h3>
+                    <p>Automated profit-taking at configurable thresholds. Lock in gains while maintaining momentum.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Website Generator</h3>
+                    <p>Launch-ready landing pages in 30 seconds. Templates, metadata, socials — all handled.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Timing Optimizer</h3>
+                    <p>Data-driven insights on the best launch windows. Know when to deploy for maximum impact.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Volume Simulator</h3>
+                    <p>Generate realistic trading activity. Trigger FOMO with coordinated wallet movements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="code-section" id="docs">
+        <div class="container">
+            <h2>Dead simple to use</h2>
+            <div class="code-block">
+                <div class="code-line code-comment"># Install Bundlr CLI</div>
+                <div class="code-line"><span class="code-cmd">npm install -g bundlr-cli</span></div>
+                <div class="code-line"></div>
+                <div class="code-line code-comment"># Initialize your project</div>
+                <div class="code-line"><span class="code-cmd">bundlr init</span></div>
+                <div class="code-line"></div>
+                <div class="code-line code-comment"># Launch your token</div>
+                <div class="code-line"><span class="code-cmd">bundlr launch</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to <span class="gradient-text">launch</span>?</h2>
+            <p>Join the beta and start launching tokens the right way.</p>
+            <a href="#" class="btn">Get Early Access</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Built for degens, by degens. <a href="https://twitter.com/bundlr_sol">@bundlr_sol</a></p>
+        </div>
+    </footer>
+</body>
+</html>
