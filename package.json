@@ -2,12 +2,7 @@
   "name": "bundlr",
   "version": "0.1.0",
   "description": "One-click bundle launcher for Solana tokens",
-  "main": "index.js",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+  "scripts": {},
   "keywords": [
     "solana",
     "pumpfun",
