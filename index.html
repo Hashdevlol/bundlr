@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bundlr — Launch Tokens Like a Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,38 +14,124 @@
         }
 
         :root {
-            --purple: #9945FF;
-            --cyan: #14F195;
-            --dark: #0E0E10;
-            --darker: #09090B;
-            --gray: #71717A;
-            --light: #FAFAFA;
+            --black: #000000;
+            --white: #ffffff;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-400: #a3a3a3;
+            --gray-600: #525252;
+            --gray-800: #262626;
+            --gray-900: #171717;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--darker);
-            color: var(--light);
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--black);
+            color: var(--white);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, var(--purple), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        ::selection {
+            background: var(--white);
+            color: var(--black);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 48px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes lineGrow {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
         }
 
         /* Nav */
         nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             padding: 24px 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -56,309 +142,817 @@
         }
 
         .logo {
-            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
 
+        .logo img {
+            height: 32px;
+            width: auto;
+            filter: invert(1);
+        }
+
         .nav-links {
             display: flex;
-            gap: 32px;
+            gap: 48px;
             list-style: none;
         }
 
         .nav-links a {
-            color: var(--gray);
+            color: var(--gray-400);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--white);
+            transition: width 0.3s;
         }
 
         .nav-links a:hover {
-            color: var(--light);
+            color: var(--white);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .btn {
-            background: linear-gradient(135deg, var(--purple), var(--cyan));
-            color: var(--dark);
-            padding: 12px 24px;
-            border-radius: 8px;
+            background: var(--white);
+            color: var(--black);
+            padding: 14px 28px;
             font-weight: 600;
             font-size: 14px;
             text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-block;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(153, 69, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
         }
 
         .btn-outline {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--light);
+            color: var(--white);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .btn-outline:hover {
-            background: rgba(255,255,255,0.05);
-            box-shadow: none;
+            background: var(--white);
+            color: var(--black);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.1);
         }
 
         /* Hero */
         .hero {
-            padding: 120px 0 80px;
-            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 160px 0 120px;
+            position: relative;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
         }
 
         .hero-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 16px;
-            background: rgba(153, 69, 255, 0.1);
-            border: 1px solid rgba(153, 69, 255, 0.2);
-            border-radius: 100px;
-            font-size: 13px;
-            color: var(--purple);
-            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-bottom: 32px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--white);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
         .hero h1 {
-            font-size: clamp(48px, 8vw, 72px);
+            font-size: clamp(48px, 6vw, 80px);
             font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 24px;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 32px;
         }
 
-        .hero p {
+        .hero h1 span {
+            display: block;
+            color: var(--gray-600);
+        }
+
+        .hero-description {
             font-size: 18px;
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto 40px;
+            color: var(--gray-400);
+            max-width: 480px;
+            margin-bottom: 48px;
+            line-height: 1.8;
         }
 
         .hero-buttons {
             display: flex;
             gap: 16px;
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
             justify-content: center;
+            align-items: center;
+        }
+
+        .hero-logo {
+            width: 300px;
+            height: 300px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 60px rgba(255,255,255,0.1));
+        }
+
+        .hero-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: invert(1);
+        }
+
+        /* Stats */
+        .stats {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         /* Features */
         .features {
-            padding: 80px 0;
+            padding: 160px 0;
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 600px;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gray-600);
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.1;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: rgba(255,255,255,0.05);
         }
 
         .feature-card {
-            background: var(--dark);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 32px;
-            transition: border-color 0.2s, transform 0.2s;
+            background: var(--black);
+            padding: 48px;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-card:hover {
-            border-color: rgba(153, 69, 255, 0.3);
-            transform: translateY(-4px);
+            background: var(--gray-900);
         }
 
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(153, 69, 255, 0.2), rgba(20, 241, 149, 0.2));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 20px;
+        .feature-number {
+            font-size: 12px;
+            color: var(--gray-600);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 24px;
         }
 
         .feature-card h3 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
         }
 
         .feature-card p {
-            color: var(--gray);
+            color: var(--gray-400);
             font-size: 15px;
+            line-height: 1.7;
         }
 
-        /* Code Block */
-        .code-section {
-            padding: 80px 0;
+        /* How it Works */
+        .how-it-works {
+            padding: 160px 0;
+            background: var(--gray-900);
         }
 
-        .code-section h2 {
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 32px;
+            margin-top: 80px;
+        }
+
+        .step {
             text-align: center;
-            font-size: 36px;
-            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .step::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 40px;
+            color: var(--gray-600);
+            font-size: 24px;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 32px;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        /* Code Section */
+        .code-section {
+            padding: 160px 0;
+            position: relative;
+        }
+
+        .code-section .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
         }
 
         .code-block {
-            background: var(--dark);
+            background: var(--gray-900);
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 32px;
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 48px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .code-header {
+            position: absolute;
+            top: 12px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .code-content {
+            margin-top: 20px;
         }
 
         .code-line {
-            margin: 8px 0;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
         }
 
-        .code-comment {
-            color: var(--gray);
+        .code-prompt {
+            color: var(--gray-600);
+            margin-right: 12px;
         }
 
         .code-cmd {
-            color: var(--cyan);
+            color: var(--white);
+        }
+
+        .code-comment {
+            color: var(--gray-600);
+            font-style: italic;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: var(--white);
+            margin-left: 4px;
+            animation: pulse 1s infinite;
         }
 
         /* CTA */
         .cta {
-            padding: 120px 0;
+            padding: 200px 0;
             text-align: center;
+            position: relative;
         }
 
         .cta h2 {
-            font-size: 48px;
+            font-size: 64px;
             font-weight: 700;
+            letter-spacing: -3px;
             margin-bottom: 24px;
         }
 
         .cta p {
-            color: var(--gray);
+            color: var(--gray-400);
             font-size: 18px;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
         }
 
         /* Footer */
         footer {
-            padding: 40px 0;
+            padding: 48px 0;
             border-top: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-            color: var(--gray);
-            font-size: 14px;
         }
 
-        footer a {
-            color: var(--light);
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
             text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 0 32px;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin: 0 auto 48px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .step::after {
+                display: none;
+            }
+
+            .code-section .container {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
-            .hero-buttons {
+
+            .hero h1 {
+                font-size: 40px;
+                letter-spacing: -1px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .cta h2 {
+                font-size: 36px;
+            }
+
+            footer .container {
                 flex-direction: column;
-                align-items: center;
+                gap: 24px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="grid-bg"></div>
+
     <nav>
         <div class="container">
-            <div class="logo"><span class="gradient-text">Bundlr</span></div>
+            <div class="logo">
+                <img src="logo.png" alt="Bundlr">
+                <span>Bundlr</span>
+            </div>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
-                <li><a href="#docs">Docs</a></li>
+                <li><a href="#how">How it Works</a></li>
                 <li><a href="https://github.com/hashdevlol/bundlr">GitHub</a></li>
             </ul>
-            <a href="#" class="btn">Get Started</a>
+            <a href="#cta" class="btn">Get Early Access</a>
         </div>
     </nav>
 
     <section class="hero">
         <div class="container">
-            <span class="hero-badge">🚀 Now in Beta</span>
-            <h1>Launch tokens<br><span class="gradient-text">like a pro</span></h1>
-            <p>One-click bundle launcher for Solana. Generate wallets, coordinate buys, cascade sells. Everything you need to launch successfully.</p>
-            <div class="hero-buttons">
-                <a href="#" class="btn">Start Launching</a>
-                <a href="https://github.com/hashdevlol/bundlr" class="btn btn-outline">View on GitHub</a>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge animate-in">
+                        <span class="dot"></span>
+                        Now in Beta
+                    </div>
+                    <h1 class="animate-in delay-1">
+                        Launch tokens
+                        <span>like a pro.</span>
+                    </h1>
+                    <p class="hero-description animate-in delay-2">
+                        The complete toolkit for Solana token launches. Generate wallets, coordinate buys, cascade sells. Everything you need in one place.
+                    </p>
+                    <div class="hero-buttons animate-in delay-3">
+                        <a href="#cta" class="btn">Start Launching →</a>
+                        <a href="https://github.com/hashdevlol/bundlr" class="btn btn-outline">View Source</a>
+                    </div>
+                </div>
+                <div class="hero-visual animate-in delay-4">
+                    <div class="hero-logo">
+                        <img src="logo.png" alt="Bundlr">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat animate-in delay-1">
+                    <div class="stat-value">20</div>
+                    <div class="stat-label">Wallets per Bundle</div>
+                </div>
+                <div class="stat animate-in delay-2">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Coordinated Groups</div>
+                </div>
+                <div class="stat animate-in delay-3">
+                    <div class="stat-value">&lt;5s</div>
+                    <div class="stat-label">Execution Time</div>
+                </div>
+                <div class="stat animate-in delay-4">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Automated</div>
+                </div>
             </div>
         </div>
     </section>
 
     <section class="features" id="features">
         <div class="container">
+            <div class="section-header">
+                <div class="section-label">Features</div>
+                <h2 class="section-title">Everything you need to launch successfully.</h2>
+            </div>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">👛</div>
-                    <h3>20-Wallet Bundler</h3>
-                    <p>Generate and fund 20 fresh wallets automatically. Split into 3 groups for realistic buying patterns.</p>
+                    <div class="feature-number">01</div>
+                    <h3>Wallet Generation</h3>
+                    <p>Create 20 fresh wallets instantly. Split into 3 strategic groups for realistic buying patterns that avoid detection.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📈</div>
+                    <div class="feature-number">02</div>
+                    <h3>Smart Funding</h3>
+                    <p>Distribute SOL from your main wallet with randomized amounts. Natural-looking transactions that don't raise flags.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-number">03</div>
                     <h3>Staggered Buys</h3>
-                    <p>Coordinate purchases across wallet groups. Simulates organic activity, avoids detection.</p>
+                    <p>Coordinate purchases across wallet groups. Group A hits first, B follows up, C confirms the trend. Simulates organic demand.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💰</div>
+                    <div class="feature-number">04</div>
                     <h3>Cascading Sells</h3>
-                    <p>Automated profit-taking at configurable thresholds. Lock in gains while maintaining momentum.</p>
+                    <p>Automated profit-taking at configurable thresholds. Lock in gains while maintaining chart momentum and buyer confidence.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
+                    <div class="feature-number">05</div>
                     <h3>Website Generator</h3>
-                    <p>Launch-ready landing pages in 30 seconds. Templates, metadata, socials — all handled.</p>
+                    <p>Launch-ready landing pages in 30 seconds. Professional templates, metadata, socials — everything handled automatically.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⏱️</div>
-                    <h3>Timing Optimizer</h3>
-                    <p>Data-driven insights on the best launch windows. Know when to deploy for maximum impact.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Volume Simulator</h3>
-                    <p>Generate realistic trading activity. Trigger FOMO with coordinated wallet movements.</p>
+                    <div class="feature-number">06</div>
+                    <h3>Timing Analytics</h3>
+                    <p>Data-driven insights on optimal launch windows. Know exactly when to deploy for maximum impact and organic traction.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="code-section" id="docs">
+    <section class="how-it-works" id="how">
         <div class="container">
-            <h2>Dead simple to use</h2>
+            <div class="section-header">
+                <div class="section-label">Process</div>
+                <h2 class="section-title">Five steps to launch.</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">⚡</div>
+                    <div class="step-title">Generate</div>
+                    <div class="step-desc">Create 20 wallets in 3 groups</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">💰</div>
+                    <div class="step-title">Fund</div>
+                    <div class="step-desc">Distribute SOL strategically</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">🚀</div>
+                    <div class="step-title">Launch</div>
+                    <div class="step-desc">Deploy token + coordinate buys</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">📈</div>
+                    <div class="step-title">Profit</div>
+                    <div class="step-desc">Cascading sells on the way up</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">🔄</div>
+                    <div class="step-title">Collect</div>
+                    <div class="step-desc">Sweep profits to main wallet</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="code-section">
+        <div class="container">
+            <div>
+                <div class="section-header">
+                    <div class="section-label">Simple</div>
+                    <h2 class="section-title">Three commands. That's it.</h2>
+                </div>
+                <p style="color: var(--gray-400); font-size: 16px; line-height: 1.8; max-width: 480px;">
+                    No complex setup. No configuration hell. Install, initialize, launch. The CLI handles everything else — wallet generation, funding, coordination, and profit collection.
+                </p>
+            </div>
             <div class="code-block">
-                <div class="code-line code-comment"># Install Bundlr CLI</div>
-                <div class="code-line"><span class="code-cmd">npm install -g bundlr-cli</span></div>
-                <div class="code-line"></div>
-                <div class="code-line code-comment"># Initialize your project</div>
-                <div class="code-line"><span class="code-cmd">bundlr init</span></div>
-                <div class="code-line"></div>
-                <div class="code-line code-comment"># Launch your token</div>
-                <div class="code-line"><span class="code-cmd">bundlr launch</span></div>
+                <div class="code-header">
+                    <div class="code-dot"></div>
+                    <div class="code-dot"></div>
+                    <div class="code-dot"></div>
+                </div>
+                <div class="code-content">
+                    <div class="code-line">
+                        <span class="code-comment"># Install the CLI</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="code-prompt">$</span>
+                        <span class="code-cmd">npm install -g bundlr-cli</span>
+                    </div>
+                    <div class="code-line" style="height: 24px;"></div>
+                    <div class="code-line">
+                        <span class="code-comment"># Initialize your project</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="code-prompt">$</span>
+                        <span class="code-cmd">bundlr init</span>
+                    </div>
+                    <div class="code-line" style="height: 24px;"></div>
+                    <div class="code-line">
+                        <span class="code-comment"># Launch your token</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="code-prompt">$</span>
+                        <span class="code-cmd">bundlr launch</span>
+                        <span class="typing-cursor"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="cta">
+    <section class="cta" id="cta">
         <div class="container">
-            <h2>Ready to <span class="gradient-text">launch</span>?</h2>
+            <h2>Ready to launch?</h2>
             <p>Join the beta and start launching tokens the right way.</p>
-            <a href="#" class="btn">Get Early Access</a>
+            <a href="#" class="btn">Get Early Access →</a>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>Built for degens, by degens. <a href="https://twitter.com/bundlr_sol">@bundlr_sol</a></p>
+            <div class="logo">
+                <img src="logo.png" alt="Bundlr" style="height: 24px;">
+                <span>Bundlr</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="https://github.com/hashdevlol/bundlr">GitHub</a></li>
+                <li><a href="#">Docs</a></li>
+                <li><a href="#">Twitter</a></li>
+            </ul>
+            <div class="footer-copy">© 2026 Bundlr. Built for degens.</div>
         </div>
     </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
