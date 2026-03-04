@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundlr — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-400: #a3a3a3;
+            --gray-600: #525252;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        ::selection {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* Invite Gate */
+        .invite-gate {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .invite-box {
+            background: var(--gray-900);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 48px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .invite-logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 32px;
+            filter: invert(1);
+        }
+
+        .invite-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .invite-subtitle {
+            color: var(--gray-400);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .invite-input {
+            width: 100%;
+            background: var(--black);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 16px 20px;
+            color: var(--white);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .invite-input:focus {
+            border-color: var(--white);
+        }
+
+        .invite-input::placeholder {
+            color: var(--gray-600);
+            letter-spacing: 2px;
+        }
+
+        .invite-btn {
+            width: 100%;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 16px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .invite-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
+        }
+
+        .invite-error {
+            color: var(--red);
+            font-size: 13px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .invite-hint {
+            color: var(--gray-600);
+            font-size: 12px;
+            margin-top: 24px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .invite-gate.hidden {
+            display: none;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background: var(--gray-900);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            filter: invert(1);
+        }
+
+        .sidebar-logo span {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            color: var(--white);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-item.active {
+            color: var(--white);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item .icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--gray-800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-plan {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 32px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background: var(--white);
+            color: var(--black);
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--gray-900);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 24px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-change.positive {
+            color: var(--green);
+        }
+
+        .stat-change.negative {
+            color: var(--red);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--gray-900);
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Wallet Groups */
+        .wallet-groups {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .wallet-group {
+            background: var(--black);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+        }
+
+        .wallet-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .wallet-group-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .wallet-group-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.05);
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .wallet-group-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .wallet-stat {
+            background: var(--gray-900);
+            padding: 12px;
+        }
+
+        .wallet-stat-label {
+            font-size: 11px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .wallet-stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Activity Feed */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .activity-meta {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        .activity-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .activity-amount.positive {
+            color: var(--green);
+        }
+
+        /* Launch History Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 500;
+        }
+
+        .table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 14px;
+        }
+
+        .table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .token-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .token-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--gray-700), var(--gray-800));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .token-symbol {
+            font-weight: 600;
+        }
+
+        .token-date {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--green);
+        }
+
+        .status-badge.pending {
+            background: rgba(234, 179, 8, 0.1);
+            color: var(--yellow);
+        }
+
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Live Indicator */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: var(--gray-800);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--white);
+            transition: width 0.5s ease;
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .wallet-groups {
+                grid-template-columns: 1fr;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Invite Gate -->
+    <div class="invite-gate" id="inviteGate">
+        <div class="invite-box">
+            <img src="logo.png" alt="Bundlr" class="invite-logo">
+            <h1 class="invite-title">Early Access</h1>
+            <p class="invite-subtitle">Enter your invite code to access the dashboard</p>
+            <input type="text" class="invite-input" id="inviteCode" placeholder="XXXX-XXXX" maxlength="9" autocomplete="off">
+            <button class="invite-btn" id="inviteBtn">Access Dashboard</button>
+            <p class="invite-error" id="inviteError">Invalid invite code. Try again.</p>
+            <p class="invite-hint">Need an invite? Join our <a href="#" style="color: var(--white);">waitlist</a></p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="logo.png" alt="Bundlr">
+                <span>Bundlr</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Overview</div>
+                    <a class="nav-item active"><span class="icon">📊</span> Dashboard</a>
+                    <a class="nav-item"><span class="icon">📈</span> Analytics</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Launch</div>
+                    <a class="nav-item"><span class="icon">🚀</span> New Launch</a>
+                    <a class="nav-item"><span class="icon">📜</span> History</a>
+                    <a class="nav-item"><span class="icon">🌐</span> Website Gen</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Wallets</div>
+                    <a class="nav-item"><span class="icon">👛</span> All Wallets</a>
+                    <a class="nav-item"><span class="icon">💰</span> Funding</a>
+                    <a class="nav-item"><span class="icon">🔄</span> Collect</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a class="nav-item"><span class="icon">⚙️</span> Config</a>
+                    <a class="nav-item"><span class="icon">🔑</span> API Keys</a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">🔨</div>
+                    <div class="user-details">
+                        <div class="user-name">anon_7x4k</div>
+                        <div class="user-plan">Pro Member</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        All systems operational
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-secondary">+ New Wallet Group</button>
+                    <button class="btn">🚀 Launch Token</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Total Balance</div>
+                    <div class="stat-value">47.82 SOL</div>
+                    <div class="stat-change positive">↑ +12.4% this week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Wallets</div>
+                    <div class="stat-value">20</div>
+                    <div class="stat-change">3 groups configured</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Launches</div>
+                    <div class="stat-value">7</div>
+                    <div class="stat-change positive">5 successful</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Profit</div>
+                    <div class="stat-value">+23.41 SOL</div>
+                    <div class="stat-change positive">↑ ~$3,847 USD</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <!-- Wallet Groups -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Wallet Groups</h2>
+                            <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">Manage</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="wallet-groups">
+                                <div class="wallet-group">
+                                    <div class="wallet-group-header">
+                                        <span class="wallet-group-name">Group A — Heavy Hitters</span>
+                                        <span class="wallet-group-badge">5 wallets</span>
+                                    </div>
+                                    <div class="wallet-group-stats">
+                                        <div class="wallet-stat">
+                                            <div class="wallet-stat-label">Buy Size</div>
+                                            <div class="wallet-stat-value">0.5 SOL</div>
+                                        </div>
+                                        <div class="wallet-stat">
+                                            <div class="wallet-stat-label">Balance</div>
+                                            <div class="wallet-stat-value">12.4 SOL</div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 82%;"></div>
+                                    </div>
+                                </div>
+                                <div class="wallet-group">
+                                    <div class="wallet-group-header">
+                                        <span class="wallet-group-name">Group B — Mid Range</span>
+                                        <span class="wallet-group-badge">10 wallets</span>
+                                    </div>
+                                    <div class="wallet-group-stats">
+                                        <div class="wallet-stat">
+                                            <div class="wallet-stat-label">Buy Size</div>
+                                            <div class="wallet-stat-value">0.3 SOL</div>
+                                        </div>
+                                        <div class="wallet-stat">
+                                            <div class="wallet-stat-label">Balance</div>
+                                            <div class="wallet-stat-value">18.7 SOL</div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 94%;"></div>
+                                    </div>
+                                </div>
+                                <div class="wallet-group">
+                                    <div class="wallet-group-header">
+                                        <span class="wallet-group-name">Group C — Cleanup</span>
+                                        <span class="wallet-group-badge">5 wallets</span>
+                                    </div>
+                                    <div class="wallet-group-stats">
+                                        <div class="wallet-stat">
+                                            <div class="wallet-stat-label">Buy Size</div>
+                                            <div class="wallet-stat-value">0.2 SOL</div>
+                                        </div>
+                                        <div class="wallet-stat">
+                                            <div class="wallet-stat-label">Balance</div>
+                                            <div class="wallet-stat-value">8.2 SOL</div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 67%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Launch History -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recent Launches</h2>
+                            <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">View All</button>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Token</th>
+                                        <th>Status</th>
+                                        <th>Peak MC</th>
+                                        <th>Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="token-name">
+                                                <div class="token-icon">🐸</div>
+                                                <div>
+                                                    <div class="token-symbol">$PEPE2</div>
+                                                    <div class="token-date">Mar 3, 2026</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge success"><span class="dot"></span> Completed</span></td>
+                                        <td class="mono">$127K</td>
+                                        <td class="mono" style="color: var(--green);">+8.4 SOL</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="token-name">
+                                                <div class="token-icon">🤖</div>
+                                                <div>
+                                                    <div class="token-symbol">$NEURAL</div>
+                                                    <div class="token-date">Mar 2, 2026</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge success"><span class="dot"></span> Completed</span></td>
+                                        <td class="mono">$84K</td>
+                                        <td class="mono" style="color: var(--green);">+5.2 SOL</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="token-name">
+                                                <div class="token-icon">🎮</div>
+                                                <div>
+                                                    <div class="token-symbol">$GAMER</div>
+                                                    <div class="token-date">Mar 1, 2026</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge pending"><span class="dot"></span> Collecting</span></td>
+                                        <td class="mono">$43K</td>
+                                        <td class="mono" style="color: var(--green);">+2.1 SOL</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="token-name">
+                                                <div class="token-icon">🌙</div>
+                                                <div>
+                                                    <div class="token-symbol">$MOONX</div>
+                                                    <div class="token-date">Feb 28, 2026</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="status-badge success"><span class="dot"></span> Completed</span></td>
+                                        <td class="mono">$312K</td>
+                                        <td class="mono" style="color: var(--green);">+14.7 SOL</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Activity</h2>
+                        <div class="live-indicator" style="font-size: 11px;">
+                            <span class="live-dot"></span>
+                            Live
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="activity-list">
+                            <li class="activity-item">
+                                <div class="activity-icon">💰</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Profit collected</div>
+                                    <div class="activity-meta">$PEPE2 → Main wallet</div>
+                                </div>
+                                <div class="activity-amount positive">+8.4 SOL</div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">📤</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Cascade sell executed</div>
+                                    <div class="activity-meta">Group B, 7 wallets</div>
+                                </div>
+                                <div class="activity-amount">4.2 SOL</div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">📈</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Price target hit</div>
+                                    <div class="activity-meta">$PEPE2 reached $127K MC</div>
+                                </div>
+                                <div class="activity-amount">—</div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">🚀</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Launch initiated</div>
+                                    <div class="activity-meta">$PEPE2 deployed</div>
+                                </div>
+                                <div class="activity-amount">9.5 SOL</div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">💸</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Wallets funded</div>
+                                    <div class="activity-meta">20 wallets, 3 groups</div>
+                                </div>
+                                <div class="activity-amount">9.5 SOL</div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">👛</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Wallets generated</div>
+                                    <div class="activity-meta">Fresh bundle created</div>
+                                </div>
+                                <div class="activity-amount">—</div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">🔑</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Session started</div>
+                                    <div class="activity-meta">Main wallet connected</div>
+                                </div>
+                                <div class="activity-amount">—</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Valid invite codes
+        const validCodes = ['BUNDLR-BETA', 'EARLY-2026', 'PUMP-IT-UP', 'HASH-DEV', 'TEST-1234'];
+
+        const inviteGate = document.getElementById('inviteGate');
+        const dashboard = document.getElementById('dashboard');
+        const inviteCode = document.getElementById('inviteCode');
+        const inviteBtn = document.getElementById('inviteBtn');
+        const inviteError = document.getElementById('inviteError');
+
+        // Check if already authenticated
+        if (localStorage.getItem('bundlr_auth')) {
+            inviteGate.classList.add('hidden');
+            dashboard.classList.add('active');
+        }
+
+        // Format input
+        inviteCode.addEventListener('input', (e) => {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (value.length > 4) {
+                value = value.slice(0, 4) + '-' + value.slice(4, 8);
+            }
+            e.target.value = value;
+            inviteError.style.display = 'none';
+        });
+
+        // Submit
+        inviteBtn.addEventListener('click', () => {
+            const code = inviteCode.value.toUpperCase();
+            if (validCodes.includes(code)) {
+                localStorage.setItem('bundlr_auth', 'true');
+                inviteGate.classList.add('hidden');
+                dashboard.classList.add('active');
+            } else {
+                inviteError.style.display = 'block';
+                inviteCode.style.borderColor = 'var(--red)';
+                setTimeout(() => {
+                    inviteCode.style.borderColor = 'rgba(255,255,255,0.1)';
+                }, 2000);
+            }
+        });
+
+        // Enter key
+        inviteCode.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                inviteBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
