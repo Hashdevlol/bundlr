@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bundlr — Launch Tokens Like a Pro</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100'/><text y='.9em' x='50%' text-anchor='middle' font-size='80'>🔨</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -603,6 +604,48 @@
             margin-bottom: 48px;
         }
 
+        .cta-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row input[type="email"] {
+            flex: 1;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-family: inherit;
+            background: var(--gray-900);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--white);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-row input[type="email"]:focus {
+            border-color: var(--white);
+        }
+
+        .form-row input[type="email"]::placeholder {
+            color: var(--gray-600);
+        }
+
+        .form-success {
+            margin-top: 20px;
+            color: var(--white);
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+        }
+
         /* Footer */
         footer {
             padding: 48px 0;
@@ -904,7 +947,15 @@
         <div class="container">
             <h2>Ready to launch?</h2>
             <p>Join the beta and start launching tokens the right way.</p>
-            <a href="#" class="btn">Get Early Access →</a>
+            <form class="cta-form" id="waitlist-form" onsubmit="handleSubmit(event)">
+                <div class="form-row">
+                    <input type="email" id="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="btn">Join Waitlist →</button>
+                </div>
+                <div class="form-success" id="form-success" style="display: none;">
+                    ✓ You're on the list. We'll be in touch.
+                </div>
+            </form>
         </div>
     </section>
 
@@ -953,6 +1004,20 @@
                 }
             });
         });
+
+        // Waitlist form handler
+        function handleSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('email-input').value;
+            // Store in localStorage for now
+            const waitlist = JSON.parse(localStorage.getItem('bundlr-waitlist') || '[]');
+            waitlist.push({ email, timestamp: Date.now() });
+            localStorage.setItem('bundlr-waitlist', JSON.stringify(waitlist));
+            
+            // Show success
+            document.querySelector('.form-row').style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+        }
     </script>
 </body>
 </html>
