@@ -34,8 +34,8 @@ bundlr launch
 
 ## Links
 
-- Website: [bundlr.app](https://bundlr.app)
-- Twitter: [@bundlr_sol](https://twitter.com/bundlr_sol)
+- Website: [bundlr.fun](https://bundlr.fun)
+- Twitter: [@0xhashlol](https://twitter.com/0xhashlol)
 - Docs: Coming soon
 
 ---
